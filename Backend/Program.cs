@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ninject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,12 @@ namespace Backend
     {
         static void Main(string[] args)
         {
+            var kernel = new StandardKernel();
+            kernel.Load<WebServerModule>();
+
+            var server = kernel.Get<WebServer>();
+            server.Start(() => kernel);
+            Console.ReadKey();
         }
     }
 }
