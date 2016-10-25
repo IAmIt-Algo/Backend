@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ninject;
 using Ninject.Modules;
 using Configuration.ConfigurationModule;
+using Service;
 
 namespace Backend
 {
@@ -14,6 +15,7 @@ namespace Backend
         public override void Load()
         {
             Kernel.Load(new ConfigurationModule());
+            Kernel.Load(new ServiceModule());
 
             Bind<WebServer>().ToSelf();
         }

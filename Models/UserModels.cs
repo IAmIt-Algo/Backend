@@ -17,4 +17,24 @@ namespace Models
             return userIdentity;
         }
     }
+
+    public class UserRegistrationModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class UserLoginModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class UserChangeCredentialsModel
+    {
+        public string Email { get; set; }
+        public string OldPassword { get; set; }
+        public string NewEmail { get; set; }
+        public string NewPassword { get; set; }
+    }
 }

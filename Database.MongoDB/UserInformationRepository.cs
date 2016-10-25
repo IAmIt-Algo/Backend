@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Database.Entities;
-using MongoDB.Driver;
 using Configuration.Configuration;
+using MongoDB.Driver;
 
 namespace Database.MongoDB
 {
