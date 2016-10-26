@@ -4,14 +4,91 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
+using Database;
+using Database.Entities;
+using System.Collections.ObjectModel;
+using MongoDB.Bson;
 
 namespace Service.LevelService
 {
     public class LevelService : ILevelService
     {
-        public Task<string> AddAttempAsync(AddAttempModel model)
+        public IUserInformationRepository _userInfoRepository;
+
+        public LevelService(IUserInformationRepository userInfoRepository)
         {
-            throw new NotImplementedException();
+            _userInfoRepository = userInfoRepository;
+        }
+
+        public async Task AddAttempAsync(AddAttempModel model)
+        {
+            int SuccessfulTime = 0;
+            //если это его первый уровень и первая попытка
+            var userInfo = await _userInfoRepository.GetUserInformationAsync(model.UserId);
+            if (userInfo == null)
+            {
+                int CompletedLevels = 0;
+                //если он прошел его
+                if (model.stars == 1 || model.stars == 2 || model.stars == 3)
+                {
+                    SuccessfulTime = model.Time;
+                    CompletedLevels = 1;
+                }
+                await _userInfoRepository.AddUserInformationAsync(
+                    new Database.Entities.UserInformation {
+                        CompletedLevelsCount = CompletedLevels,
+                        UserId = model.UserId,
+                        Levels = new Collection<Level>(),
+                        Id = ObjectId.GenerateNewId() });
+                await _userInfoRepository.AddLevelAsync(
+                    model.UserId, new Level {
+                        AttemptsCount = 1,
+                        Name = model.LevelName,
+                        SummaryAttemptsTime = model.Time,
+                        SuccessfulAttemptTime = SuccessfulTime});
+                return;
+            }
+            var level = await _userInfoRepository.GetLevelAsync(model.UserId, model.LevelName);
+            //если он еще не проходил этот уровень
+            if (level == null)
+            {
+                //если уровень пройден
+                if (model.stars == 1 || model.stars == 2 || model.stars == 3)
+                {
+                    SuccessfulTime = model.Time;
+                }
+                await _userInfoRepository.AddLevelAsync(
+                    model.UserId, new Level
+                    {
+                        Name = model.LevelName,
+                        AttemptsCount = 1,
+                        SummaryAttemptsTime = model.Time,
+                        SuccessfulAttemptTime = SuccessfulTime
+                    });
+                return;
+            }
+            
+            if (level.stars == 3)
+            {
+                return;
+            }
+            int addTime = model.Time;
+            int addAttempt = 1;
+            int SuccessfulTime = level.SuccessfulAttemptTime;
+            int stars = model.stars;
+            if (level.stars >= model.stars)
+            {
+                model.stars = level.stars;
+            }
+            if (model.stars == 3)
+            {
+                SuccessfulTime = model.Time;
+            }
+            await _userInfoRepository.UpdateLevelAsync(
+                new Level { Name = model.LevelName,
+                    AttemptsCount = level.AttemptsCount + addAttempt,
+                    SuccessfulAttemptTime = SuccessfulTime,
+                    SummaryAttemptsTime = level.SummaryAttemptsTime + addTime});
         }
     }
 }

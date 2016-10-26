@@ -9,9 +9,9 @@ namespace Models
 {
     public class AddAttempModel
     {
-        ObjectId UserId { get; set; }
-        string LevelName { get; set; }
-        string Time { get; set; }
-        int stars { get; set; }
+        public string UserId { get; set; }
+        public string LevelName { get; set; }
+        public int Time { get; set; }
+        public int stars { get; set; }
     }
 }
