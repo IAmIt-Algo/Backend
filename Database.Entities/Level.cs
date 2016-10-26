@@ -12,7 +12,8 @@ namespace Database.Entities
         public int? AttemptsCount { get; set; }
         public enum StarsCount
         {
-            One = 1,
+            Zero = 0,
+            One,
             Two,
             Three
         }

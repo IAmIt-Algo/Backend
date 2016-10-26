@@ -45,7 +45,9 @@ namespace Service.LevelService
                         AttemptsCount = 1,
                         Name = model.LevelName,
                         SummaryAttemptsTime = model.Time,
-                        SuccessfulAttemptTime = SuccessfulTime});
+                        SuccessfulAttemptTime = SuccessfulTime,
+                        Stars = (Level.StarsCount) model.stars
+                    });
                 return;
             }
             var level = await _userInfoRepository.GetLevelAsync(model.UserId, model.LevelName);
@@ -63,22 +65,21 @@ namespace Service.LevelService
                         Name = model.LevelName,
                         AttemptsCount = 1,
                         SummaryAttemptsTime = model.Time,
-                        SuccessfulAttemptTime = SuccessfulTime
+                        SuccessfulAttemptTime = SuccessfulTime,
+                        Stars = (Level.StarsCount) model.stars
                     });
                 return;
             }
             
-            if (level.stars == 3)
+            if (level.Stars == Level.StarsCount.Three)
             {
                 return;
             }
-            int addTime = model.Time;
-            int addAttempt = 1;
-            int SuccessfulTime = level.SuccessfulAttemptTime;
-            int stars = model.stars;
-            if (level.stars >= model.stars)
+            SuccessfulTime = (int) level.SuccessfulAttemptTime;
+            Level.StarsCount? stars = (Level.StarsCount) model.stars;
+            if (level.Stars >= stars)
             {
-                model.stars = level.stars;
+                stars = level.Stars;
             }
             if (model.stars == 3)
             {
@@ -86,9 +87,10 @@ namespace Service.LevelService
             }
             await _userInfoRepository.UpdateLevelAsync(
                 new Level { Name = model.LevelName,
-                    AttemptsCount = level.AttemptsCount + addAttempt,
+                    AttemptsCount = level.AttemptsCount + 1,
                     SuccessfulAttemptTime = SuccessfulTime,
-                    SummaryAttemptsTime = level.SummaryAttemptsTime + addTime});
+                    SummaryAttemptsTime = level.SummaryAttemptsTime + model.Time,
+                    Stars = stars});
         }
     }
 }
