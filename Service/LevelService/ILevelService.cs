@@ -9,6 +9,6 @@ namespace Service.LevelService
 {
     public interface ILevelService
     {
-        Task<string> AddAttempAsync(AddAttempModel model);
+        Task AddAttempAsync(AddAttempModel model);
     }
 }

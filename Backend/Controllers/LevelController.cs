@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Models;
 using Service.LevelService;
@@ -34,18 +35,12 @@ namespace Backend.Controllers
         [System.Web.Http.HttpPost, System.Web.Http.Route("addAttemp"), ValidateAntiForgeryToken]
         public async Task<IHttpActionResult> AddAttemp(AddAttempModel model)
         {
+            model.UserId = User.Identity.GetUserId();
             try {
-                return Ok(await _service.AddAttempAsync(model));
+                await _service.AddAttempAsync(model);
+                return Ok();
             } catch (Exception e) {
                 return BadRequest(e.Message);
-            }
-        }
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return Request.GetOwinContext().Authentication;
             }
         }
     }
