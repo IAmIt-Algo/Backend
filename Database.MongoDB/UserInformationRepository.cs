@@ -55,9 +55,17 @@ namespace Database.MongoDB
             return (await _informations.FindAsync(i => i.UserId == userId)).FirstOrDefault();
         }
 
-        public Task UpdateLevelAsync(Level level)
+        public async Task UpdateLevelAsync(string userId, Level level)
         {
-            throw new NotImplementedException();
+            
+            var update = Builders<UserInformation>.Update.Inc(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).AttemptsCount, 1);
+            if (level.SummaryAttemptsTime != null)
+                update.Set(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).SummaryAttemptsTime, level.SummaryAttemptsTime);
+            if (level.SuccessfulAttemptTime != null)
+                update.Set(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).SuccessfulAttemptTime, level.SuccessfulAttemptTime);
+            if (level.Stars != null)
+                update.Set(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).Stars, level.Stars);
+            await _informations.UpdateOneAsync(i => i.UserId == userId, update);
         }
 
         public async Task UpdateUserInformationAsync(UserInformation information)
