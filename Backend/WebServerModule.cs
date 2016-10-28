@@ -7,6 +7,7 @@ using Ninject;
 using Ninject.Modules;
 using Configuration.ConfigurationModule;
 using Service;
+using Database.MongoDB;
 
 namespace Backend
 {
@@ -14,8 +15,9 @@ namespace Backend
     {
         public override void Load()
         {
-            Kernel.Load(new ConfigurationModule());
-            Kernel.Load(new ServiceModule());
+            Kernel.Load<ServiceModule>();
+            Kernel.Load<ConfigurationModule>();
+            Kernel.Load<DatabaseModule>();
 
             Bind<WebServer>().ToSelf();
         }

@@ -16,7 +16,7 @@ namespace Database
 
         Task AddLevelAsync(string userId, Level level);
         Task<Level> GetLevelAsync(string userId, string levelName);
-        Task UpdateLevelAsync(Level level);
+        Task UpdateLevelAsync(string userId, Level level);
         Task DeleteLevelAsync(string userId, string levelName);
     }
 }

@@ -13,7 +13,7 @@ namespace Service.LevelService
 {
     public class LevelService : ILevelService
     {
-        public IUserInformationRepository _userInfoRepository;
+        private IUserInformationRepository _userInfoRepository;
 
         public LevelService(IUserInformationRepository userInfoRepository)
         {
@@ -29,7 +29,7 @@ namespace Service.LevelService
             {
                 int CompletedLevels = 0;
                 //если он прошел его
-                if (model.stars == 1 || model.stars == 2 || model.stars == 3)
+                if (model.stars != null)
                 {
                     SuccessfulTime = model.Time;
                     CompletedLevels = 1;
@@ -55,7 +55,7 @@ namespace Service.LevelService
             if (level == null)
             {
                 //если уровень пройден
-                if (model.stars == 1 || model.stars == 2 || model.stars == 3)
+                if (model.stars != null)
                 {
                     SuccessfulTime = model.Time;
                 }
@@ -85,7 +85,7 @@ namespace Service.LevelService
             {
                 SuccessfulTime = model.Time;
             }
-            await _userInfoRepository.UpdateLevelAsync(
+            await _userInfoRepository.UpdateLevelAsync(model.UserId,
                 new Level { Name = model.LevelName,
                     AttemptsCount = level.AttemptsCount + 1,
                     SuccessfulAttemptTime = SuccessfulTime,
