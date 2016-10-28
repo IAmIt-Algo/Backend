@@ -57,6 +57,7 @@ namespace Service.LevelService
                 //если уровень пройден
                 if (model.stars != null)
                 {
+
                     SuccessfulTime = model.Time;
                 }
                 await _userInfoRepository.AddLevelAsync(

@@ -28,7 +28,7 @@ namespace Backend.Controllers
             _service = service;
         }
 
-        [System.Web.Http.HttpPost, System.Web.Http.Route("increaseRating"), ValidateAntiForgeryToken]
+       /* [System.Web.Http.HttpPost, System.Web.Http.Route("increaseRating"), ValidateAntiForgeryToken]
         public async Task<IHttpActionResult> IncreaseRating(IncreaseRatingModel model)
         {
             model.UserName = User.Identity.GetUserName();
@@ -41,6 +41,6 @@ namespace Backend.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
+        }*/
     }
 }

@@ -9,6 +9,6 @@ namespace Service.RatingService
 {
     public interface IRatingService
     {
-        Task IncreaseRatingAsync(IncreaseRatingModel model);
+        Task IncreaseRatingAsync(string username, int stars);
     }
 }

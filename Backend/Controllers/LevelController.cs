@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Models;
 using Service.LevelService;
+using Service.RatingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,13 @@ namespace Backend.Controllers
             }
         }
 
-        private readonly ILevelService _service;
+        private readonly ILevelService _levelService;
+        private readonly IRatingService _ratingService;
 
-        public LevelController(ILevelService service)
+        public LevelController(ILevelService levelService, IRatingService ratingService)
         {
-            _service = service;
+            _levelService = levelService;
+            _ratingService = ratingService;
         }
 
         [System.Web.Http.HttpPost, System.Web.Http.Route("addAttemp"), ValidateAntiForgeryToken]
@@ -37,7 +40,9 @@ namespace Backend.Controllers
         {
             model.UserId = User.Identity.GetUserId();
             try {
-                await _service.AddAttempAsync(model);
+                if (model.stars != null)
+                    await _ratingService.IncreaseRatingAsync(User.Identity.GetUserName(), (int)model.stars);
+                await _levelService.AddAttempAsync(model);
                 return Ok();
             } catch (Exception e) {
                 return BadRequest(e.Message);

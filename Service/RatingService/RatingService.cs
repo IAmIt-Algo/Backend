@@ -16,18 +16,18 @@ namespace Service.RatingService
         {
             _ratingRepository = ratingRepository;
         }
-        public async Task IncreaseRatingAsync(IncreaseRatingModel model)
+        public async Task IncreaseRatingAsync(string username, int stars)
         {
-            if(await _ratingRepository.GetRatingItemAsync(model.UserName) == null)
+            if(await _ratingRepository.GetRatingItemAsync(username) == null)
             {
                 var raitingItem = new Rating
                 {
-                    UserName = model.UserName,
-                    StarsCount = model.StarsCount
+                    UserName = username,
+                    StarsCount = stars
                 };
                 await _ratingRepository.CreateRatingItemAsync(raitingItem);
             } 
-            await _ratingRepository.IncreaseRatingItemAsync(model.UserName, model.StarsCount);
+            await _ratingRepository.IncreaseRatingItemAsync(username, stars);
         }
     }
 }
