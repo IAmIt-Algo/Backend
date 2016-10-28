@@ -14,13 +14,14 @@ namespace Service.LevelService
     public class LevelService : ILevelService
     {
         private IUserInformationRepository _userInfoRepository;
+        private IRatingRepository _ratingRepository;
 
-        public LevelService(IUserInformationRepository userInfoRepository)
+        public LevelService(IUserInformationRepository userInfoRepository, IRatingRepository ratingRepository)
         {
             _userInfoRepository = userInfoRepository;
+            _ratingRepository = ratingRepository;
         }
-
-        public async Task AddAttempAsync(AddAttempModel model)
+        public async Task AddAttemptAsync(AddAttemptModel model)
         {
             int SuccessfulTime = 0;
             //если это его первый уровень и первая попытка
@@ -29,8 +30,9 @@ namespace Service.LevelService
             {
                 int CompletedLevels = 0;
                 //если он прошел его
-                if (model.stars != null)
+                if (model.Stars != null)
                 {
+                    await _ratingRepository.CreateRatingItemAsync(new Rating { UserName = model.UserName, StarsCount = (int) model.Stars });
                     SuccessfulTime = model.Time;
                     CompletedLevels = 1;
                 }
@@ -46,7 +48,7 @@ namespace Service.LevelService
                         Name = model.LevelName,
                         SummaryAttemptsTime = model.Time,
                         SuccessfulAttemptTime = SuccessfulTime,
-                        Stars = (Level.StarsCount) model.stars
+                        Stars = (Level.StarsCount) model.Stars
                     });
                 return;
             }
@@ -55,9 +57,9 @@ namespace Service.LevelService
             if (level == null)
             {
                 //если уровень пройден
-                if (model.stars != null)
+                if (model.Stars != null)
                 {
-
+                    await _ratingRepository.IncreaseRatingItemAsync(model.UserName, (int) model.Stars);
                     SuccessfulTime = model.Time;
                 }
                 await _userInfoRepository.AddLevelAsync(
@@ -67,7 +69,7 @@ namespace Service.LevelService
                         AttemptsCount = 1,
                         SummaryAttemptsTime = model.Time,
                         SuccessfulAttemptTime = SuccessfulTime,
-                        Stars = (Level.StarsCount) model.stars
+                        Stars = (Level.StarsCount) model.Stars
                     });
                 return;
             }
@@ -77,12 +79,16 @@ namespace Service.LevelService
                 return;
             }
             SuccessfulTime = (int) level.SuccessfulAttemptTime;
-            Level.StarsCount? stars = (Level.StarsCount) model.stars;
+            Level.StarsCount? stars = (Level.StarsCount) model.Stars;
             if (level.Stars >= stars)
             {
                 stars = level.Stars;
             }
-            if (model.stars == 3)
+            else
+            {
+                await _ratingRepository.IncreaseRatingItemAsync(model.UserName, (int) model.Stars - (int) level.Stars); //так точно можно????????
+            }
+            if (model.Stars == 3)
             {
                 SuccessfulTime = model.Time;
             }

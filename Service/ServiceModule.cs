@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using Service.LevelService;
+using Service.RatingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Service
         public override void Load()
         {
             Bind<ILevelService>().To<LevelService.LevelService>();
+            Bind<IRatingService>().To<RatingService.RatingService>();
         }
     }
 }

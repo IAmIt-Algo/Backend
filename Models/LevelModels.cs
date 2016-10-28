@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class AddAttempModel
+    public class AddAttemptModel
     {
         public string UserId { get; set; }
+        public string UserName { get; set; }
         public string LevelName { get; set; }
         public int Time { get; set; }
-        public int? stars { get; set; }
+        public int? Stars { get; set; }
     }
 }

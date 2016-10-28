@@ -35,14 +35,13 @@ namespace Backend.Controllers
             _ratingService = ratingService;
         }
 
-        [System.Web.Http.HttpPost, System.Web.Http.Route("addAttemp"), ValidateAntiForgeryToken]
-        public async Task<IHttpActionResult> AddAttemp(AddAttempModel model)
+        [System.Web.Http.HttpPost, System.Web.Http.Route("addAttempt"), ValidateAntiForgeryToken]
+        public async Task<IHttpActionResult> AddAttempt(AddAttemptModel model)
         {
             model.UserId = User.Identity.GetUserId();
+            model.UserName = User.Identity.GetUserName();
             try {
-                if (model.stars != null)
-                    await _ratingService.IncreaseRatingAsync(User.Identity.GetUserName(), (int)model.stars);
-                await _levelService.AddAttempAsync(model);
+                await _levelService.AddAttemptAsync(model);
                 return Ok();
             } catch (Exception e) {
                 return BadRequest(e.Message);
