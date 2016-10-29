@@ -23,10 +23,9 @@ namespace Database.MongoDB
         public async Task AddAttemptAsync(string userId, Attempt attempt)
         {
             Func<Level,bool> levelFunc = l => l.Name == attempt.LevelName;
-            var level = await GetLevelAsync(userId, attempt.LevelName);
             var update = Builders<UserInformation>.Update.Inc(i => i.Levels.FirstOrDefault(levelFunc).AttemptsCount, 1)
                     .Inc(i => i.Levels.FirstOrDefault(levelFunc).SummaryAttemptsTime, attempt.AttemptTime);       
-            if(level.Stars <= attempt.Stars && level.SuccessfulAttemptTime >= attempt.AttemptTime)
+            if(attempt.IsSussessful)
             {
                 update.Set(i => i.Levels.FirstOrDefault(levelFunc).SuccessfulAttemptTime, attempt.AttemptTime)
                     .Set(i => i.Levels.FirstOrDefault(levelFunc).Stars, attempt.Stars);

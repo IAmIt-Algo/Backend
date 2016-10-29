@@ -60,7 +60,8 @@ namespace Service.LevelService
             {
                 AttemptTime = model.Time,
                 LevelName = model.LevelName,
-                Stars = (StarsCount) model.Stars
+                Stars = (StarsCount) model.Stars,
+                IsSussessful = isSuccessful
             });
         }
     }
