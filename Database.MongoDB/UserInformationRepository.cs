@@ -28,9 +28,8 @@ namespace Database.MongoDB
                     .Inc(i => i.Levels.FirstOrDefault(levelFunc).SummaryAttemptsTime, attempt.AttemptTime);       
             if(level.Stars <= attempt.Stars && level.SuccessfulAttemptTime >= attempt.AttemptTime)
             {
-                var success = Builders<UserInformation>.Update.Set(i => i.Levels.FirstOrDefault(levelFunc).SuccessfulAttemptTime, attempt.AttemptTime)
+                update.Set(i => i.Levels.FirstOrDefault(levelFunc).SuccessfulAttemptTime, attempt.AttemptTime)
                     .Set(i => i.Levels.FirstOrDefault(levelFunc).Stars, attempt.Stars);
-                await _informations.UpdateOneAsync(i => i.UserId == userId, success);
             }
             await _informations.UpdateOneAsync(i => i.UserId == userId, update);
         }
