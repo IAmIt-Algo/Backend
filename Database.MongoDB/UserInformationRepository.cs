@@ -34,31 +34,15 @@ namespace Database.MongoDB
             await _informations.UpdateOneAsync(i => i.UserId == userId, update);
         }
 
-        public async Task<Level> AddLevelAsync(string userId, string levelName)
+        public async Task AddLevelAsync(string userId, Level level)
         {
-            var level = new Level
-            {
-                Name = levelName,
-                AttemptsCount = 0,
-                Stars = Level.StarsCount.Zero,
-                SuccessfulAttemptTime = 0,
-                SummaryAttemptsTime = 0
-            };
             var update = Builders<UserInformation>.Update
                 .AddToSet(i => i.Levels, level);
             await _informations.UpdateOneAsync(i => i.UserId == userId, update);
-            return level;
         }
 
-        public async Task AddUserInformationAsync(string userId)
+        public async Task AddUserInformationAsync(string userId, UserInformation information)
         {
-            var information = new UserInformation
-            {
-                Id = ObjectId.GenerateNewId(),
-                UserId = userId,
-                CompletedLevelsCount = 0,
-                Levels = new List<Level>()
-            };
             await _informations.InsertOneAsync(information);
         }
 
