@@ -17,7 +17,7 @@ namespace Database.Entities
             Two,
             Three
         }
-        public StarsCount? Stars{ get; set; }
+        public StarsCount Stars{ get; set; }
         public int? SuccessfulAttemptTime {get; set;}
         public int? SummaryAttemptsTime { get; set; }
     }

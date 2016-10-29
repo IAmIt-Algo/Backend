@@ -9,14 +9,14 @@ namespace Database
 {
     public interface IUserInformationRepository
     {
-        Task AddUserInformationAsync(UserInformation information);
+        Task AddUserInformationAsync(string userId);
         Task<UserInformation> GetUserInformationAsync(string userId);
         Task UpdateUserInformationAsync(UserInformation information);
         Task DeleteUserInformationAsync(string userId);
 
-        Task AddLevelAsync(string userId, Level level);
+        Task<Level> AddLevelAsync(string userId, string levelName);
         Task<Level> GetLevelAsync(string userId, string levelName);
-        Task UpdateLevelAsync(string userId, Level level);
         Task DeleteLevelAsync(string userId, string levelName);
+        Task AddAttemptAsync(string userId, Attempt attempt);
     }
 }

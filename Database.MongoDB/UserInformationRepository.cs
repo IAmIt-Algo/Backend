@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Database.Entities;
 using Configuration.Configuration;
 using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace Database.MongoDB
 {
@@ -19,15 +20,46 @@ namespace Database.MongoDB
             _informations = db.GetCollection<UserInformation>(nameof(UserInformation));
         }
 
-        public async Task AddLevelAsync(string userId, Level level)
+        public async Task AddAttemptAsync(string userId, Attempt attempt)
         {
-            var update = Builders<UserInformation>.Update
-                .AddToSet(i => i.Levels, level);
+            Func<Level,bool> levelFunc = l => l.Name == attempt.LevelName;
+            var level = await GetLevelAsync(userId, attempt.LevelName);
+            var update = Builders<UserInformation>.Update.Inc(i => i.Levels.FirstOrDefault(levelFunc).AttemptsCount, 1)
+                    .Inc(i => i.Levels.FirstOrDefault(levelFunc).SummaryAttemptsTime, attempt.AttemptTime);       
+            if(level.Stars <= attempt.Stars && level.SuccessfulAttemptTime >= attempt.AttemptTime)
+            {
+                var success = Builders<UserInformation>.Update.Set(i => i.Levels.FirstOrDefault(levelFunc).SuccessfulAttemptTime, attempt.AttemptTime)
+                    .Set(i => i.Levels.FirstOrDefault(levelFunc).Stars, attempt.Stars);
+                await _informations.UpdateOneAsync(i => i.UserId == userId, success);
+            }
             await _informations.UpdateOneAsync(i => i.UserId == userId, update);
         }
 
-        public async Task AddUserInformationAsync(UserInformation information)
+        public async Task<Level> AddLevelAsync(string userId, string levelName)
         {
+            var level = new Level
+            {
+                Name = levelName,
+                AttemptsCount = 0,
+                Stars = Level.StarsCount.Zero,
+                SuccessfulAttemptTime = 0,
+                SummaryAttemptsTime = 0
+            };
+            var update = Builders<UserInformation>.Update
+                .AddToSet(i => i.Levels, level);
+            await _informations.UpdateOneAsync(i => i.UserId == userId, update);
+            return level;
+        }
+
+        public async Task AddUserInformationAsync(string userId)
+        {
+            var information = new UserInformation
+            {
+                Id = ObjectId.GenerateNewId(),
+                UserId = userId,
+                CompletedLevelsCount = 0,
+                Levels = new List<Level>()
+            };
             await _informations.InsertOneAsync(information);
         }
 
@@ -55,18 +87,6 @@ namespace Database.MongoDB
             return (await _informations.FindAsync(i => i.UserId == userId)).FirstOrDefault();
         }
 
-        public async Task UpdateLevelAsync(string userId, Level level)
-        {
-            
-            var update = Builders<UserInformation>.Update.Inc(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).AttemptsCount, 1);
-            if (level.SummaryAttemptsTime != null)
-                update.Set(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).SummaryAttemptsTime, level.SummaryAttemptsTime);
-            if (level.SuccessfulAttemptTime != null)
-                update.Set(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).SuccessfulAttemptTime, level.SuccessfulAttemptTime);
-            if (level.Stars != null)
-                update.Set(i => i.Levels.FirstOrDefault(l => l.Name == level.Name).Stars, level.Stars);
-            await _informations.UpdateOneAsync(i => i.UserId == userId, update);
-        }
 
         public async Task UpdateUserInformationAsync(UserInformation information)
         {

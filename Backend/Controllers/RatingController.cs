@@ -27,20 +27,5 @@ namespace Backend.Controllers
         {
             _service = service;
         }
-
-       /* [System.Web.Http.HttpPost, System.Web.Http.Route("increaseRating"), ValidateAntiForgeryToken]
-        public async Task<IHttpActionResult> IncreaseRating(IncreaseRatingModel model)
-        {
-            model.UserName = User.Identity.GetUserName();
-            try
-            {
-                await _service.IncreaseRatingAsync(model);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }*/
     }
 }
