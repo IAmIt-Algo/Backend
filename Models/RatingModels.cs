@@ -11,4 +11,9 @@ namespace Models
         public int StarsCount { get; set; }
         public string UserName { get; set; }
     }
+    public class GetRatingPositionModel
+    {
+        public long LowestPosition { get; set; }
+        public long HighestPosition { get; set; }
+    }
 }

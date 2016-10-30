@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Models;
 using Service.LevelService;
+using Service.RatingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,11 @@ namespace Backend.Controllers
             }
         }
 
-        private readonly ILevelService _service;
+        private readonly IRatingService _ratingService;
 
-        public AccountController(ILevelService service)
+        public AccountController(IRatingService ratingService)
         {
-            _service = service;
+            _ratingService = ratingService;
         }
 
         [System.Web.Http.HttpPost, System.Web.Http.Route("registration"), System.Web.Http.AllowAnonymous, ValidateAntiForgeryToken]
@@ -39,6 +40,8 @@ namespace Backend.Controllers
                 return BadRequest("User with this email already exist");
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             var result = await UserManager.CreateAsync(user, model.Password);
+            await _ratingService.AddRatingItemAsync(User.Identity.GetUserName());
+
             if (!result.Succeeded)
             {
                 var errorsEnumerator = result.Errors.GetEnumerator();

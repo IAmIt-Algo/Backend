@@ -27,5 +27,10 @@ namespace Backend.Controllers
         {
             _service = service;
         }
+        [System.Web.Http.HttpGet, System.Web.Http.Route("getRatingPosition"), ValidateAntiForgeryToken]
+        public async Task<IHttpActionResult> GetRatingPosition()
+        {
+            return Ok(await _service.GetRatingPositionAsync(User.Identity.GetUserName()));
+        }
     }
 }

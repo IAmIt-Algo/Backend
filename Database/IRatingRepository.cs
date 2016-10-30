@@ -9,8 +9,9 @@ namespace Database
 {
     public interface IRatingRepository
     {
-        Task CreateRatingItemAsync(Rating rating);
+        Task AddRatingItemAsync(Rating rating);
         Task IncreaseRatingItemAsync(string userName, int increaseAmount);
         Task<Rating> GetRatingItemAsync(string userName);
+        Task<long> CountUsersByConditionAsync(System.Linq.Expressions.Expression<Func<Rating, bool>> filter);
     }
 }

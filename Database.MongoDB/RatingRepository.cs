@@ -17,12 +17,18 @@ namespace Database.MongoDB
             var client = new MongoClient();
             var db = client.GetDatabase(configuration.NameDatabase);
             _ratingItems = db.GetCollection<Rating>(nameof(Rating));
-            var field = new StringFieldDefinition<Rating>("UserName");
+            var field = new StringFieldDefinition<Rating>("StarsCount");
             var options = new CreateIndexOptions() { Unique = false };
             var indexDefinition = new IndexKeysDefinitionBuilder<Rating>().Ascending(field);
             _ratingItems.Indexes.CreateOneAsync(indexDefinition, options);
         }
-        public async Task CreateRatingItemAsync(Rating rating)
+
+        public async Task<long> CountUsersByConditionAsync(System.Linq.Expressions.Expression<Func<Rating, bool>> filter)
+        {
+            return (await _ratingItems.CountAsync(filter));
+        }
+
+        public async Task AddRatingItemAsync(Rating rating)
         {
             await _ratingItems.InsertOneAsync(rating);
         }
