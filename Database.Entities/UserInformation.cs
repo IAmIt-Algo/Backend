@@ -7,6 +7,6 @@ namespace Database.Entities
     {
         public ObjectId Id { get; set; }
         public string UserId { get; set; }
-        public ICollection<Level> Levels { get; set; }
+        public List<Level> Levels { get; set; }
     }
 }
