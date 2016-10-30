@@ -27,12 +27,10 @@ namespace Backend.Controllers
         }
 
         private readonly ILevelService _levelService;
-        private readonly IRatingService _ratingService;
 
-        public LevelController(ILevelService levelService, IRatingService ratingService)
+        public LevelController(ILevelService levelService)
         {
             _levelService = levelService;
-            _ratingService = ratingService;
         }
 
         [System.Web.Http.HttpPost, System.Web.Http.Route("addAttempt"), ValidateAntiForgeryToken]

@@ -41,19 +41,5 @@ namespace Service.RatingService
             };
             return model;
         }
-
-        public async Task IncreaseRatingAsync(string username, int stars)
-        {
-            if(await _ratingRepository.GetRatingItemAsync(username) == null)
-            {
-                var raitingItem = new Rating
-                {
-                    UserName = username,
-                    StarsCount = stars
-                };
-                await _ratingRepository.AddRatingItemAsync(raitingItem);
-            } 
-            await _ratingRepository.IncreaseRatingItemAsync(username, stars);
-        }
     }
 }

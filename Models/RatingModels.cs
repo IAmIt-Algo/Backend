@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class IncreaseRatingModel
-    {
-        public int StarsCount { get; set; }
-        public string UserName { get; set; }
-    }
     public class GetRatingPositionModel
     {
         public long LowestPosition { get; set; }

@@ -13,14 +13,6 @@ namespace Backend.Controllers
     [System.Web.Http.Authorize]
     public class RatingController : ApiController
     {
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-        }
-
         private readonly IRatingService _service;
 
         public RatingController(IRatingService service)

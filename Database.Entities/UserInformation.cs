@@ -7,7 +7,6 @@ namespace Database.Entities
     {
         public ObjectId Id { get; set; }
         public string UserId { get; set; }
-        public int CompletedLevelsCount { get; set; }
         public ICollection<Level> Levels { get; set; }
     }
 }

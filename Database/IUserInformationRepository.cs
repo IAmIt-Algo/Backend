@@ -11,7 +11,6 @@ namespace Database
     {
         Task AddUserInformationAsync(string userId, UserInformation information);
         Task<UserInformation> GetUserInformationAsync(string userId);
-        Task UpdateUserInformationAsync(UserInformation information);
         Task DeleteUserInformationAsync(string userId);
 
         Task AddLevelAsync(string userId, Level level);

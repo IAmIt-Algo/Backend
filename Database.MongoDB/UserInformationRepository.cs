@@ -60,21 +60,19 @@ namespace Database.MongoDB
 
         public async Task<Level> GetLevelAsync(string userId, string levelName)
         {
-            var levels = (await _informations.FindAsync(i => i.UserId == userId)).FirstOrDefault().Levels;
-            return levels.FirstOrDefault(l => l.Name == levelName);
+            try
+            {
+                var levels = (await _informations.FindAsync(i => i.UserId == userId)).FirstOrDefault().Levels;
+                return levels.FirstOrDefault(l => l.Name == levelName);
+            } catch (NullReferenceException e)
+            {
+                return null;
+            }
         }
 
         public async Task<UserInformation> GetUserInformationAsync(string userId)
         {
             return (await _informations.FindAsync(i => i.UserId == userId)).FirstOrDefault();
-        }
-
-
-        public async Task UpdateUserInformationAsync(UserInformation information)
-        {
-            var update = Builders<UserInformation>.Update
-                .Set(i => i.CompletedLevelsCount, information.CompletedLevelsCount);
-            await _informations.UpdateOneAsync(i => i.Id == information.Id, update);
         }
     }
 }

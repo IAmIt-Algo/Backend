@@ -40,7 +40,7 @@ namespace Backend.Controllers
                 return BadRequest("User with this email already exist");
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             var result = await UserManager.CreateAsync(user, model.Password);
-            await _ratingService.AddRatingItemAsync(User.Identity.GetUserName());
+            await _ratingService.AddRatingItemAsync(model.Email);
 
             if (!result.Succeeded)
             {
