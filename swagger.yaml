@@ -35,6 +35,8 @@ paths:
           description: User with this email already exist
           schema:
             $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
   /login:
     post:
       tags:
@@ -56,6 +58,8 @@ paths:
           schema:
             $ref: '#/definitions/Error'
           description: Invalid email or password
+        default:
+          description: Unexpected error
   /changeCredentials:
     post:
       summary: Changes Credentials
@@ -81,6 +85,8 @@ paths:
           description: Authorization has been denied for this request
           schema:
             $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
       security: 
         - AlgorithmicsAuth: []
   /logOff:
@@ -98,9 +104,10 @@ paths:
           description: Authorization has been denied for this request
           schema:
             $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
       security: 
        - AlgorithmicsAuth: []
-  
   /addAttempt:
     post:
       summary: Adds attempt
@@ -126,23 +133,17 @@ paths:
           description: Unexpected error
       security: 
         - AlgorithmicsAuth: []
-  /getRatingPosition:
+  /getRating:
     get:
-      summary: Gets interval of user in rating
-      description:: Gets interval of user in rating
-      parameters:
-        - name: model
-          required: true
-          in: body
-          schema:
-            $ref: '#/definitions/GetRatingPositionModel'
+      summary: Return first 50 users and your highest and lowest possible position
+      description: Return first 50 users and your highest and lowest possible position
       tags:
         - Rating
       responses:
         200:
-          description: Returns message 'ok'
+          description: Return first 50 users and your highest and lowest possible position (types are long)
           schema:
-            $ref: '#/definitions/Message'
+            $ref: '#/definitions/GetRatingPositionModel'
         401:
           description: Authorization has been denied for this request
           schema:
@@ -150,12 +151,32 @@ paths:
         default:
           description: Unexpected error
       security: 
-        - AlgorithmicsAuth: []
+          - AlgorithmicsAuth: []
 securityDefinitions:
   AlgorithmicsAuth:
     type: basic
     description: Authentication using black magic
 definitions:
+  GetRatingPositionModel:
+    type: object
+    properties:
+      HighestPosition:
+        type: integer
+      LowestPosition:
+        type: integer
+      Rating:
+        $ref: '#/definitions/RatingArray'
+  RatingModel:
+    type: object
+    properties:
+      UserName:
+        type: string
+      StarsCount:
+        type: integer
+  RatingArray:
+    type: array
+    items:
+      $ref: '#/definitions/RatingModel'
   UserChangeCredentialsModel:
     type: object
     properties:
@@ -189,13 +210,6 @@ definitions:
         type: string
       Email:
         type: string
-  GetRatingPositionModel:
-    type: object
-	properties:
-	  LowestPosition:
-	    type: long
-	  HighestPosition:
-	    type: integer
   AddAttemptModel:
     type: object
     properties:

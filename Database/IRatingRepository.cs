@@ -9,6 +9,7 @@ namespace Database
 {
     public interface IRatingRepository
     {
+        Task<List<Rating>> GetRatingAsync();
         Task AddRatingItemAsync(Rating rating);
         Task IncreaseRatingItemAsync(string userName, int increaseAmount);
         Task<Rating> GetRatingItemAsync(string userName);

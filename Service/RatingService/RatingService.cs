@@ -31,15 +31,27 @@ namespace Service.RatingService
 
         public async Task<GetRatingPositionModel> GetRatingPositionAsync(string username)
         {
+            var rating = await _ratingRepository.GetRatingAsync();
+            rating.Sort(Compare);
+            int PlayersCount = 50;
+            if (rating.Count < PlayersCount)
+                PlayersCount = rating.Count;
+            rating = rating.GetRange(0, PlayersCount);
             var starsCount = (await _ratingRepository.GetRatingItemAsync(username)).StarsCount;
             var biggerRatingCount = await _ratingRepository.CountUsersByConditionAsync(r => r.StarsCount > starsCount);
             var equalRatingCount = await _ratingRepository.CountUsersByConditionAsync(r => r.StarsCount == starsCount);
             var model = new GetRatingPositionModel
             {
                 HighestPosition = biggerRatingCount + 1,
-                LowestPosition = biggerRatingCount + equalRatingCount
+                LowestPosition = biggerRatingCount + equalRatingCount,
+                Rating = rating.Select(r => new RatingModel { UserName = r.UserName, StarsCount = r.StarsCount }).ToList()
             };
             return model;
+        }
+
+        public int Compare(Rating a, Rating b)
+        {
+            return b.StarsCount - a.StarsCount;
         }
     }
 }

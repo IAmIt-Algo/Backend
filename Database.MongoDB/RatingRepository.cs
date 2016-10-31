@@ -28,6 +28,11 @@ namespace Database.MongoDB
             return (await _ratingItems.CountAsync(filter));
         }
 
+        public async Task<List<Rating>> GetRatingAsync()
+        {
+            return _ratingItems.AsQueryable().ToList();
+        } 
+
         public async Task AddRatingItemAsync(Rating rating)
         {
             await _ratingItems.InsertOneAsync(rating);
