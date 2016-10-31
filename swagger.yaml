@@ -126,7 +126,31 @@ paths:
           description: Unexpected error
       security: 
         - AlgorithmicsAuth: []
-  
+  /getRatingPosition:
+    get:
+      summary: Gets interval of user in rating
+      description:: Gets interval of user in rating
+      parameters:
+        - name: model
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/GetRatingPositionModel'
+      tags:
+        - Rating
+      responses:
+        200:
+          description: Returns message 'ok'
+          schema:
+            $ref: '#/definitions/Message'
+        401:
+          description: Authorization has been denied for this request
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+      security: 
+        - AlgorithmicsAuth: []
 securityDefinitions:
   AlgorithmicsAuth:
     type: basic
@@ -165,6 +189,13 @@ definitions:
         type: string
       Email:
         type: string
+  GetRatingPositionModel:
+    type: object
+	properties:
+	  LowestPosition:
+	    type: long
+	  HighestPosition:
+	    type: integer
   AddAttemptModel:
     type: object
     properties:
