@@ -30,7 +30,7 @@ namespace Database.MongoDB
 
         public async Task<List<Rating>> GetRatingAsync()
         {
-            return _ratingItems.AsQueryable().ToList();
+            return await _ratingItems.AsQueryable().ToListAsync();
         } 
 
         public async Task AddRatingItemAsync(Rating rating)

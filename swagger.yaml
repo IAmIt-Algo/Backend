@@ -3,7 +3,7 @@ info:
   title: Algorithmics API
   version: "1.0.0"
 # the domain of the service
-host: no
+host: http://ec2-184-72-112-237.compute-1.amazonaws.com
 # array of all schemes that your API supports
 schemes:
   - http
