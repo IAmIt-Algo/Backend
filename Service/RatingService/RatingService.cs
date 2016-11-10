@@ -44,6 +44,7 @@ namespace Service.RatingService
             {
                 HighestPosition = biggerRatingCount + 1,
                 LowestPosition = biggerRatingCount + equalRatingCount,
+                StarsCount = starsCount,
                 Rating = rating.Select(r => new RatingModel { UserName = r.UserName, StarsCount = r.StarsCount }).ToList()
             };
             return model;
