@@ -44,16 +44,6 @@ namespace Backend
                 {
                     var request = context.Request;
                     Console.WriteLine($">> [{request.RemoteIpAddress}] HTTP {request.Method} {request.Uri}");
-                    Console.WriteLine("________________________________________________________________");
-                    Console.WriteLine("HEADERS");
-                    request.Headers.ToList().ForEach(e => Console.WriteLine($"    {e.Key} = {e.Value}"));
-                    Console.WriteLine("________________________________________________________________");
-                    Console.WriteLine("BODY");
-                    using(StreamReader sr = new StreamReader(request.Body))
-                    {
-                        Console.WriteLine(sr.ReadToEnd());
-                    }
-                    Console.WriteLine("________________________________________________________________");
                     try
                     {
                         await next();

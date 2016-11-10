@@ -51,7 +51,6 @@ namespace Backend.Controllers
                 {
                     errorString += (" " + errorsEnumerator.Current);
                 }
-                Console.WriteLine($"(!)Error: {errorString}");
                 return BadRequest(errorString);
             }
             return Ok("Ok");
