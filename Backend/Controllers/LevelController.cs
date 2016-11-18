@@ -45,5 +45,18 @@ namespace Backend.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [System.Web.Http.HttpGet, System.Web.Http.Route("getInfo"), ValidateAntiForgeryToken]
+        public async Task<IHttpActionResult> GetInfo()
+        {
+            try
+            {
+                return Ok(await _levelService.GetUserInformationAsync(User.Identity.GetUserId()));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

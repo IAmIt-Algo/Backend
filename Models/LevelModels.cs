@@ -15,4 +15,13 @@ namespace Models
         public int Time { get; set; }
         public int? Stars { get; set; }
     }
+    public class UserInformationModel
+    {
+        public List<LevelModel> Levels { get; set; }
+    }
+    public class LevelModel
+    {
+        public string Name { get; set; }
+        public int StarsCount { get; set; }
+    }
 }

@@ -66,5 +66,19 @@ namespace Service.LevelService
                 IsSussessful = isSuccessful
             });
         }
+
+        public async Task<UserInformationModel> GetUserInformationAsync(string userId)
+        {
+            var levels = (await _userInfoRepository.GetUserInformationAsync(userId)).Levels.Select(u =>
+                new LevelModel
+                {
+                    Name = u.Name,
+                    StarsCount = (int)u.Stars
+                }).ToList();
+            return new UserInformationModel
+            {
+                Levels = levels
+            };
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Models;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Service.LevelService
     public interface ILevelService
     {
         Task AddAttemptAsync(AddAttemptModel model);
+        Task<UserInformationModel> GetUserInformationAsync(string userId);
     }
 }
