@@ -69,7 +69,12 @@ namespace Service.LevelService
 
         public async Task<UserInformationModel> GetUserInformationAsync(string userId)
         {
-            var levels = (await _userInfoRepository.GetUserInformationAsync(userId)).Levels.Select(u =>
+            var info = await _userInfoRepository.GetUserInformationAsync(userId);
+            if (info == null)
+            {
+                return new UserInformationModel();
+            }
+            var levels = info.Levels.Select(u =>
                 new LevelModel
                 {
                     Name = u.Name,
