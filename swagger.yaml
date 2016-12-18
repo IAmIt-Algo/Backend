@@ -28,7 +28,7 @@ paths:
             $ref: '#/definitions/UserRegistrationModel'
       responses:
         200:
-          description: Returns message 'ok'
+          description: Returns 'ok'
           schema:
             $ref: '#/definitions/Message'
         400:
